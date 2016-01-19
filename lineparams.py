@@ -9,7 +9,7 @@ class Single_line:
        self.N  = N
        self.Rb = Rb
    def P(self):
-      gmr = self.Rb*((self.N*conductor.reff/self.Rb)**(1.0/self.N))
+      gmr = self.Rb*((self.N*conductor.Reff/self.Rb)**(1.0/self.N))
       P_mat = np.zeros((5,5))
     
       P_mat[1,1] = np.log(2*self.a1[1]/gmr)
@@ -48,7 +48,7 @@ class Double_line:
         self.N  = N
         self.Rb = Rb
    def P(self):
-        gmr = self.Rb*((self.N*conductor.reff/self.Rb)**(1.0/self.N))
+        gmr = self.Rb*((self.N*conductor.Reff/self.Rb)**(1.0/self.N))
         x   = [0,self.a1[0],self.a2[0],self.a3[0],self.a4[0],self.a5[0],self.a6[0]] # x-coordinates
         y   = [0,self.a1[1],self.a2[1],self.a3[1],self.a4[1],self.a5[1],self.a6[1]] # y-coordinates
     
