@@ -6,10 +6,10 @@ g = 3e5
 
 
 class ACSR:
-    def __init__(self,Dc_resistance = 0.35,radius_conductor = 0.0159,eff_res = 0.0853):
+    def __init__(self,Dc_resistance = 0.35,radius_conductor = 0.0159,eff_rad = 0.01272):
         self.Rdc = Dc_resistance       # Ohm/km
         self.r    = radius_conductor    # m
-        self.Reff = eff_res             # m
+        self.Reff = eff_rad             # m
     def __str__(self):
         return str("R_dc = "+str(self.R_dc)+"\n"+"r = "+str(self.r)+"\n"+"reff = "+str(self.reff))
 

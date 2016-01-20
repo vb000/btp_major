@@ -1,7 +1,7 @@
 import numpy as np
 from constants import *
 
-class Single_line:
+class Single_circuit:
    def __init__(self,a1,a2,a3,N,Rb):
        self.a1 = a1
        self.a2 = a2
@@ -9,7 +9,7 @@ class Single_line:
        self.N  = N
        self.Rb = Rb
    def P(self):
-      gmr = self.Rb*((self.N*conductor.Reff/self.Rb)**(1.0/self.N))
+      gmr = self.Rb*((self.N*conductor.r/self.Rb)**(1.0/self.N))
       P_mat = np.zeros((5,5))
     
       P_mat[1,1] = np.log(2*self.a1[1]/gmr)
@@ -37,7 +37,7 @@ class Single_line:
       Linv = np.linalg.inv(self.L())
       return (Linv/(g**2))*1e12 # nF/km
 
-class Double_line:
+class Double_circuit:
    def __init__(self,a1,a2,a3,a4,a5,a6,N,Rb):
         self.a1 = a1
         self.a2 = a2
@@ -74,6 +74,6 @@ class Double_line:
         return (Linv/(g**2))*1e12 # nF/km
 
 if __name__=="__main__":
-   line = Single_line((-11.0,15.0), (0.0,15.0), (11.0,15.0),10, 10)
-   print(line.P())
+   line = Single_circuit((-11.0,15.0), (0.0,15.0), (11.0,15.0),10, 10)
+   print(line.L())
 
