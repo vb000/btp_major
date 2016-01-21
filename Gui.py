@@ -1,4 +1,5 @@
-from tkinter import *
+from Tkinter import *
+import numpy as np
 import constants
 import lineparams
         
@@ -10,7 +11,7 @@ class Gui:
        self.line_type.set("Double line configuration")
     
        self.main_window = parent
-       self.main_window.geometry("960x540")
+       self.main_window.geometry("1200x540")
      
        self.lineselection_frame = Frame(parent,relief=RIDGE,borderwidth=2,height=50)
        self.lineselection_frame.pack(side=TOP,expand=NO,fill=X)
@@ -108,7 +109,7 @@ class Gui:
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[2]=Entry(self.entry_frame,width=12,justify=CENTER)
        self.entries[2].pack(side=TOP,anchor=W)
-       self.entries[2].insert(0,float(10.0))
+       self.entries[2].insert(0,float(.288))
 
 
        Label(self.label_frame, text="Effective Radius(in M):",\
@@ -127,13 +128,13 @@ class Gui:
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[5]=Entry(self.entry_frame,width=12,justify=CENTER)
        self.entries[5].pack(side=TOP,anchor=W)
-       self.entries[5].insert(0,float(10.0))
+       self.entries[5].insert(0,float(2.0))
 
        self.computeRLC_button=Button(self.output_frame,text="Compute RLC parameters",command=self.compute)
        self.computeRLC_button.pack(side=LEFT)
        
        self.text=Text(self.result_frame)
-       self.text.pack()
+       self.text.pack(expand=TRUE, fill='both')
 
 
    def compute(self):
@@ -153,18 +154,17 @@ class Gui:
                                           ,a6=(float(self.entries[72].get()),float(self.entries[73].get()))\
                                           ,N=float(self.entries[5].get())\
                                           ,Rb=float(self.entries[2].get()))
-       #self.Lout= (obj.L()).__str__()
-       #self.Cout = (obj.C()).__str__()
-       print(obj.L())
-       self.text.insert(END,str(obj.L()))
-          
-
-
-
+       np.set_printoptions(precision=3)
+       Lout = "L=\n" + str(obj.L()) + " mH/km\n"
+       Cout = "C=\n" + str(obj.C()) + " nF/km\n"
+       #print(obj.L())
+       self.text.config(state=NORMAL)
+       self.text.delete(1.0, END)
+       self.text.insert(END, "\n"+Lout+"\n"+Cout)
+       self.text.config(state=DISABLED)
       
     
    def refresh_entries(self):
-       print(self.line_type.get())
        if self.line_type.get() == "Single line configuration":
           self.entries[52]["state"]=DISABLED
           self.entries[62]["state"]=DISABLED

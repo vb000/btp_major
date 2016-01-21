@@ -9,7 +9,7 @@ class Single_circuit:
        self.N  = N
        self.Rb = Rb
    def P(self):
-      gmr = self.Rb*((self.N*conductor.r/self.Rb)**(1.0/self.N))
+      gmr = self.Rb*((self.N*conductor.Reff/self.Rb)**(1.0/self.N))
       P_mat = np.zeros((5,5))
     
       P_mat[1,1] = np.log(2*self.a1[1]/gmr)
@@ -74,6 +74,8 @@ class Double_circuit:
         return (Linv/(g**2))*1e12 # nF/km
 
 if __name__=="__main__":
-   line = Single_circuit((-11.0,15.0), (0.0,15.0), (11.0,15.0),10, 10)
-   print(line.L())
+   line1 = Single_circuit((-11.0,15.0), (0.0,15.0), (11.0,15.0), 2, .2288)
+   line2 = Double_circuit((-11.0,15.0), (0.0,15.0), (11.0,15.0), (-11.0,10.0), (0.0,10.0), (11.0,10.0), 2, .2288)
+   print(line1.C())
+   print(line2.C())
 
