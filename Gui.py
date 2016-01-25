@@ -11,7 +11,7 @@ class Gui:
        self.line_type.set("Double line configuration")
     
        self.main_window = parent
-       self.main_window.geometry("1060x720")
+       self.main_window.geometry("1400x720")
      
        self.lineselection_frame = Frame(parent,relief=RIDGE,borderwidth=2,height=50)
        self.lineselection_frame.pack(side=TOP,expand=NO,fill=X)
@@ -27,9 +27,39 @@ class Gui:
 
        self.result_frame=Frame(self.input_frame,relief=RIDGE,borderwidth=1,height=400)
        self.result_frame.pack(side=LEFT,expand=YES,fill=BOTH,padx=10,pady=5,ipadx=5,ipady=5)
+     
+       self.power_frame=Frame(self.result_frame,relief=RIDGE,borderwidth=1,height=400)
+       self.power_frame.pack(side=LEFT,expand=YES,fill=BOTH,padx=10,pady=5,ipadx=5,ipady=5)
+       
+       self.labelpower_frame=Frame(self.power_frame)
+       self.labelpower_frame.pack(side=LEFT,expand=YES,fill=BOTH)
+     
+       self.entrypower_frame=Frame(self.power_frame,padx=3,pady=3)
+       self.entrypower_frame.pack(side=TOP,expand=YES,fill=BOTH)
+      
+       self.entries = {}
+       Label(self.labelpower_frame, text="Power Rating(in MW):",\
+             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[20]=Entry(self.entrypower_frame,width=12,justify=CENTER)
+       self.entries[20].pack(side=TOP,anchor=W)
+       self.entries[20].insert(0,float(1000))
 
-       Label(self.lineselection_frame, text="Select the transmission line configuration type:",
-            font=("Times",16,"bold italic"),padx=3,pady=3, justify=LEFT).pack(side=LEFT, anchor=W)
+       Label(self.labelpower_frame, text="Voltage Rating(in KV):",\
+            font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[30]=Entry(self.entrypower_frame,width=12,justify=CENTER)
+       self.entries[30].pack(side=TOP,anchor=W)
+       self.entries[30].insert(0,float(400))
+
+
+       Label(self.labelpower_frame, text="Length of Transmission Line(in kM):",\
+            font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[40]=Entry(self.entrypower_frame,width=12,justify=CENTER)
+       self.entries[40].pack(side=TOP,anchor=W)
+       self.entries[40].insert(0,float(200))
+
+
+       Label(self.lineselection_frame, text="Transmission line configuration type:",
+            font=("Times",14,"bold"),padx=3,pady=3, justify=LEFT).pack(side=LEFT, anchor=W)
        
        line_types = ["Single line configuration","Double line configuration"]
        
@@ -39,10 +69,6 @@ class Gui:
        self.coordinate_frame=Frame(self.linegeometry_frame)
        self.coordinate_frame.pack(side=TOP,expand=YES,fill=BOTH,padx=5,pady=5,ipadx=5,ipady=5)
        
-       self.groundline_frame=Frame(self.linegeometry_frame)
-       self.groundline_frame.pack(side=TOP,expand=YES,fill=BOTH,padx=3,pady=3,ipadx=2,ipady=2)
-       
-       self.entries={}
        self.conductorno_frame=Frame(self.coordinate_frame)
        self.conductorno_frame.pack(side=LEFT,expand=NO,fill=Y)
        self.x_frame=Frame(self.coordinate_frame)
@@ -50,12 +76,12 @@ class Gui:
        self.y_frame=Frame(self.coordinate_frame)
        self.y_frame.pack(side=LEFT,expand=NO,fill=Y)
 
-       Label(self.groundline_frame, text="Number of ground conductors:",\
-             font=("Times",12,"italic"),padx=0,pady=0, justify=LEFT).pack(side=LEFT, anchor=W)
+       Label(self.lineselection_frame, text="Number of ground conductors:",\
+             font=("Times",14,"bold"),padx=10,pady=0, justify=LEFT).pack(side=LEFT, anchor=W)
        self.groundconductors_no=IntVar()
        self.groundconductors_no.set(2)
        for option in (0,1,2):
-           button = Radiobutton(self.groundline_frame, text=str(option),font=10,value=option,\
+           button = Radiobutton(self.lineselection_frame, text=str(option),font=10,value=option,\
            variable=self.groundconductors_no,command=self.refresh_groundno).pack(side=LEFT,padx=5,pady=3)
 
        self.entries[11]=Entry(self.conductorno_frame,width=12,justify=CENTER)
@@ -111,10 +137,10 @@ class Gui:
        self.phaseconductor_frame.pack(side=TOP,fill=BOTH,expand=YES)
       
        Label(self.phaseconductor_frame, text="Phase conductor and bundle parameters",\
-             font=("Helvetica",12,"bold"),fg="blue",padx=5,pady=5, justify=LEFT).pack(side=TOP, anchor=W)
+             font=("Helvetica",12,"bold"),fg="blue",padx=3,pady=3, justify=LEFT).pack(side=TOP, anchor=W)
       
        self.bundle_frame=Frame(self.linegeometry_frame,relief=SUNKEN,borderwidth=2)
-       self.bundle_frame.pack(side=TOP,fill=BOTH,expand=YES,padx=5,pady=5,ipadx=5,ipady=5)
+       self.bundle_frame.pack(side=TOP,fill=BOTH,expand=YES,padx=3,pady=3,ipadx=3,ipady=3)
      
       
        self.label_frame=Frame(self.bundle_frame)
@@ -155,14 +181,26 @@ class Gui:
        self.entries[5].pack(side=TOP,anchor=W)
        self.entries[5].insert(0,float(2.0))
        
+       Label(self.label_frame, text="Number of strands in a conductor:",
+            font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[15]=Entry(self.entry_frame,width=12,justify=CENTER)
+       self.entries[15].pack(side=TOP,anchor=W)
+       self.entries[15].insert(0,float(26))
+       
        self.groundconductor_frame=Frame(self.linegeometry_frame)
        self.groundconductor_frame.pack(side=TOP,fill=BOTH,expand=YES)
       
+       Label(self.label_frame, text="Diameter of the strand(in M):",
+            font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[25]=Entry(self.entry_frame,width=12,justify=CENTER)
+       self.entries[25].pack(side=TOP,anchor=W)
+       self.entries[25].insert(0,float(0.00444))
+       
        Label(self.groundconductor_frame, text="Ground conductor and bundle parameters",\
-             font=("Helvetica",12,"bold"),padx=5,pady=5,fg="blue", justify=LEFT).pack(side=TOP, anchor=W)
+             font=("Helvetica",12,"bold"),padx=3,pady=3,fg="blue", justify=LEFT).pack(side=TOP, anchor=W)
  
        self.bundleg_frame=Frame(self.linegeometry_frame,relief=SUNKEN,borderwidth=2)
-       self.bundleg_frame.pack(side=TOP,fill=BOTH,expand=YES,padx=5,pady=5,ipadx=10,ipady=10)
+       self.bundleg_frame.pack(side=TOP,fill=BOTH,expand=YES,padx=3,pady=3,ipadx=5,ipady=5)
      
       
        self.labelg_frame=Frame(self.bundleg_frame)
@@ -203,6 +241,18 @@ class Gui:
        self.entries[10].pack(side=TOP,anchor=W)
        self.entries[10].insert(0,float(1.0))
 
+       Label(self.labelg_frame, text="Number of strands in a conductor:",
+            font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[16]=Entry(self.entryg_frame,width=12,justify=CENTER)
+       self.entries[16].pack(side=TOP,anchor=W)
+       self.entries[16].insert(0,float(26))
+      
+       Label(self.labelg_frame, text="Diameter of the strand(in M):",
+            font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[26]=Entry(self.entryg_frame,width=12,justify=CENTER)
+       self.entries[26].pack(side=TOP,anchor=W)
+       self.entries[26].insert(0,float(0.00444))
+       
        self.computeRLC_button=Button(self.output_frame,text="Compute RLC parameters",command=self.compute)
        self.computeRLC_button.pack(side=LEFT)
 
