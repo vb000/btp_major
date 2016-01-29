@@ -37,6 +37,12 @@ class Single_circuit:
    def C(self):
       Linv = np.linalg.inv(self.L())
       return (Linv/(g**2))*1e12 # nF/km
+   
+   def pcc_mat(self,v_mat):
+      #pcc_mat is phase charge coefficient matrix used in the calculation of voltage gradient
+      return abs(np.dot(np.linalg.inv(self.P()),v_mat)) # Kv"""
+   def gcc_mat(self,v_mat):
+      return "Not Valid"
 
 class Single_circuit_1g:
    def __init__(self,a1,a2,a3,a4,Np,Ng,Rbp,Rbg,conductor_p,conductor_g):
@@ -71,23 +77,29 @@ class Single_circuit_1g:
                                    ) # ln(I12/A12)
               P_mat[j,i]=P_mat[i,j]
     
-        
-      p = P_mat[1:4,1:4]#phase p
-      u = P_mat[4:5,1:4]
-      v = P_mat[4:5,4:5]
-      w = P_mat[1:4,4:5]
-      vinv= np.linalg.inv(v)
-      p_r =reduce(np.dot ,[w,vinv,u])
-      p_red = p-p_r
-      return p_red
+      return P_mat[1:5,1:5]
 
-
+   def Ppp(self):
+       return self.P()[0:3,0:3]
+   def Pgp(self):
+       return self.P()[3:4,0:3]
+   def Ppg(self):
+       return self.P()[0:3,3:4]
+   def Pgg(self):
+       return self.P()[3:4,3:4]
+   def P_red(self):
+       return self.Ppp()-reduce(np.dot,[self.Ppg(),np.linalg.inv(self.Pgg()),self.Pgp()])    
    def L(self):
-      return 0.2 * self.P() # mH/km
+      return 0.2 * self.P_red() # mH/km
 
    def C(self):
       Linv = np.linalg.inv(self.L())
       return (Linv/(g**2))*1e12 # nF/km
+   
+   def pcc_mat(self,v_mat):
+       return abs(np.dot(np.linalg.inv(self.P_red()),v_mat)) # Kv"""
+   def gcc_mat(self,v_mat):
+       return abs(reduce(np.dot,[np.linalg.inv(self.Pgg()),self.Pgp(),np.dot(np.linalg.inv(self.P_red()),v_mat)])) # Kv"""
 
 class Single_circuit_2g:
    def __init__(self,a1,a2,a3,a4,a5,Np,Ng,Rbp,Rbg,conductor_p,conductor_g):
@@ -123,22 +135,31 @@ class Single_circuit_2g:
                                    ) # ln(I12/A12)
               P_mat[j,i]=P_mat[i,j]
     
-        
-      p = P_mat[1:4,1:4]#phase p
-      u = P_mat[4:6,1:4]
-      v = P_mat[4:6,4:6]
-      w = P_mat[1:4,4:6]
-      vinv= np.linalg.inv(v)
-      p_r =reduce(np.dot ,[w,vinv,u])
-      p_red = p-p_r
-      return p_red
-
+      return P_mat[1:6,1:6]
+   
+   def Ppp(self):
+       return self.P()[0:3,0:3]
+   def Pgp(self):
+       return self.P()[3:5,0:3]
+   def Ppg(self):
+       return self.P()[0:3,3:5]
+   def Pgg(self):
+       return self.P()[3:5,3:5]
+   def P_red(self):
+       return self.Ppp()-reduce(np.dot,[self.Ppg(),np.linalg.inv(self.Pgg()),self.Pgp()])
+   
    def L(self):
-      return 0.2 * self.P() # mH/km
+      return 0.2 * self.P_red() # mH/km
 
    def C(self):
       Linv = np.linalg.inv(self.L())
       return (Linv/(g**2))*1e12 # nF/km
+   def pcc_mat(self,v_mat):
+       return abs(np.dot(np.linalg.inv(self.P_red()),v_mat)) # Kv"""
+   def gcc_mat(self,v_mat):
+       return abs(reduce(np.dot,[np.linalg.inv(self.Pgg()),self.Pgp(),np.dot(np.linalg.inv(self.P_red()),v_mat)])) # Kv"""
+
+      
 
 class Double_circuit:
    def __init__(self,a1,a2,a3,a4,a5,a6,Np,Rbp,conductor_p):
@@ -176,6 +197,11 @@ class Double_circuit:
    def C(self):
         Linv = np.linalg.inv(self.L())
         return (Linv/(g**2))*1e12 # nF/km
+   def pcc_mat(self,v_mat):
+      #pcc_mat is phase charge coefficient matrix used in the calculation of voltage gradient
+      return abs(np.dot(np.linalg.inv(self.P()),np.concatenate((v_mat,v_mat),axis=0))) # Kv"""
+   def gcc_mat(self,v_mat):
+      return "Not Valid"
 
 class Double_circuit_1g:
    def __init__(self,a1,a2,a3,a4,a5,a6,a7,Np,Ng,Rbp,Rbg,conductor_p,conductor_g):
@@ -211,22 +237,32 @@ class Double_circuit_1g:
                                    ) # ln(I12/A12)
                 P_mat[j,i]=P_mat[i,j]
     
-        
-        p = P_mat[1:7,1:7]#phase p
-        u = P_mat[7:8,1:7]
-        v = P_mat[7:8,7:8]
-        w = P_mat[1:7,7:8]
-        vinv= np.linalg.inv(v)
-        p_r =reduce(np.dot ,[w,vinv,u])
-        p_red = p-p_r
-        return p_red
-
+        return P_mat[1:8,1:8]
+   
+   def Ppp(self):
+       return self.P()[0:6,0:6]
+   def Pgp(self):
+       return self.P()[6:7,0:6]
+   def Ppg(self):
+       return self.P()[0:6,6:7]
+   def Pgg(self):
+       return self.P()[6:7,6:7]
+   def P_red(self):
+       return self.Ppp()-reduce(np.dot,[self.Ppg(),np.linalg.inv(self.Pgg()),self.Pgp()])
+   
    def L(self):
-        return 0.2*self.P() # mH/km
+        return 0.2*self.P_red() # mH/km
 
    def C(self):
         Linv = np.linalg.inv(self.L())
         return (Linv/(g**2))*1e12 # nF/km
+   
+   def pcc_mat(self,v_mat):
+       return abs(np.dot(np.linalg.inv(self.P_red()),np.concatenate((v_mat,v_mat),axis=0))) # Kv"""
+   def gcc_mat(self,v_mat):
+       return abs(reduce(np.dot,[np.linalg.inv(self.Pgg()),self.Pgp(),\
+                  np.dot(np.linalg.inv(self.P_red()),np.concatenate((v_mat,v_mat),axis=0))])) # Kv"""
+
 
 class Double_circuit_2g:
    def __init__(self,a1,a2,a3,a4,a5,a6,a7,a8,Np,Ng,Rbp,Rbg,conductor_p,conductor_g):
@@ -266,22 +302,31 @@ class Double_circuit_2g:
                                    ) # ln(I12/A12)
                 P_mat[j,i]=P_mat[i,j]
     
-        p = P_mat[1:7,1:7]#phase p
-        u = P_mat[7:9,1:7]
-        v = P_mat[7:9,7:9]
-        w = P_mat[1:7,7:9]
-        vinv= np.linalg.inv(v)
-        p_r =reduce(np.dot ,[w,vinv,u])
-        p_red = p-p_r
-        return p_red
-        
+        return P_mat[1:9,1:9]
+   
+   def Ppp(self):
+       return self.P()[0:6,0:6]
+   def Pgp(self):
+       return self.P()[6:8,0:6]
+   def Ppg(self):
+       return self.P()[0:6,6:8]
+   def Pgg(self):
+       return self.P()[6:8,6:8]
+   def P_red(self):
+       return self.Ppp()-reduce(np.dot,[self.Ppg(),np.linalg.inv(self.Pgg()),self.Pgp()])
 
    def L(self):
-        return 0.2*self.P() # mH/km
+        return 0.2*self.P_red() # mH/km
 
    def C(self):
         Linv = np.linalg.inv(self.L())
         return (Linv/(g**2))*1e12 # nF/km
+   def pcc_mat(self,v_mat):
+       return abs(np.dot(np.linalg.inv(self.P_red()),np.concatenate((v_mat,v_mat),axis=0))) # Kv"""
+   def gcc_mat(self,v_mat):
+       return abs(reduce(np.dot,[np.linalg.inv(self.Pgg()),self.Pgp(),\
+                  np.dot(np.linalg.inv(self.P_red()),np.concatenate((v_mat,v_mat),axis=0))])) # Kv"""
+
 
 if __name__=="__main__":
    conductor_p=ACSR(Reff=0.01585)

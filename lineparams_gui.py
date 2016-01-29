@@ -1,7 +1,6 @@
 from Tkinter import *
 import numpy as np
-from constants import *
-import lineparams
+import constants,lineparams
         
 class Gui:
    """calculates transmission line parameters"""
@@ -48,7 +47,7 @@ class Gui:
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[30]=Entry(self.entrypower_frame,width=12,justify=CENTER)
        self.entries[30].pack(side=TOP,anchor=W)
-       self.entries[30].insert(0,float(400))
+       self.entries[30].insert(0,float(420))
 
 
        Label(self.labelpower_frame, text="Length of Transmission Line(in kM):",\
@@ -112,26 +111,26 @@ class Gui:
        for i in range(8):
            self.entries[(i+2)*10+2]=Entry(self.x_frame,width=20,justify=CENTER)
            self.entries[(i+2)*10+2].pack(side=TOP,anchor=N)
-       self.entries[22].insert(0,float(-11.0))
+       self.entries[22].insert(0,float(-11.3))
        self.entries[32].insert(0,float(0.0))
-       self.entries[42].insert(0,float(11.0))
-       self.entries[52].insert(0,float(-11.0))
+       self.entries[42].insert(0,float(11.3))
+       self.entries[52].insert(0,float(-11.3))
        self.entries[62].insert(0,float(0.0))
-       self.entries[72].insert(0,float(11.0))
-       self.entries[82].insert(0,float(-5.0))
-       self.entries[92].insert(0,float(5.0))
+       self.entries[72].insert(0,float(11.3))
+       self.entries[82].insert(0,float(-8.0))
+       self.entries[92].insert(0,float(8.0))
       
        for i in range(8):
            self.entries[(i+2)*10+3]=Entry(self.y_frame,width=20,justify=CENTER)
            self.entries[(i+2)*10+3].pack(side=TOP,anchor=N)
-       self.entries[23].insert(0,float(15.0))
-       self.entries[33].insert(0,float(15.0))
-       self.entries[43].insert(0,float(15.0))
-       self.entries[53].insert(0,float(10.0))
-       self.entries[63].insert(0,float(10.0))
-       self.entries[73].insert(0,float(10.0))
-       self.entries[83].insert(0,float(20.0))
-       self.entries[93].insert(0,float(20.0))
+       self.entries[23].insert(0,float(9.81))
+       self.entries[33].insert(0,float(9.81))
+       self.entries[43].insert(0,float(9.81))
+       self.entries[53].insert(0,float(12.0))
+       self.entries[63].insert(0,float(12.0))
+       self.entries[73].insert(0,float(12.0))
+       self.entries[83].insert(0,float(20.875))
+       self.entries[93].insert(0,float(20.875))
 
        self.phaseconductor_frame=Frame(self.linegeometry_frame)
        self.phaseconductor_frame.pack(side=TOP,fill=BOTH,expand=YES)
@@ -253,30 +252,26 @@ class Gui:
        self.entries[26].pack(side=TOP,anchor=W)
        self.entries[26].insert(0,float(0.00444))
        
-       self.computeRLC_button=Button(self.output_frame,text="Compute RLC parameters",command=self.compute)
+       self.computeRLC_button=Button(self.output_frame,text="Compute RLC parameters",command=self.display)
        self.computeRLC_button.pack(side=LEFT)
 
-       self.voltagegradient_button=Button(self.output_frame,text="Compute Surface Voltage Gradient",command=self.compute)
-       self.voltagegradient_button.pack(side=LEFT,padx=5)
-
-       
        self.text=Text(self.result_frame)
        self.text.pack(expand=TRUE, fill='both')
 
 
    def compute(self):
-       obj = None
-       cp=ACSR(float(self.entries[4].get()),float(self.entries[1].get()),float(self.entries[3].get()))
-       cg=ACSR(float(self.entries[9].get()),float(self.entries[6].get()),float(self.entries[8].get()))
+       self.obj = None
+       cp=constants.ACSR(float(self.entries[4].get()),float(self.entries[1].get()),float(self.entries[3].get()))
+       cg=constants.ACSR(float(self.entries[9].get()),float(self.entries[6].get()),float(self.entries[8].get()))
        if self.groundconductors_no.get()==0:
            if self.line_type.get()=="Single line configuration":
-               obj = lineparams.Single_circuit(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+               self.obj = lineparams.Single_circuit(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
                                               ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
                                               ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
                                               ,Np=float(self.entries[5].get())\
                                               ,Rbp=float(self.entries[2].get()),conductor_p=cp)
            else:
-               obj = lineparams.Double_circuit(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+               self.obj = lineparams.Double_circuit(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
                                               ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
                                               ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
                                               ,a4=(float(self.entries[52].get()),float(self.entries[53].get()))\
@@ -286,7 +281,7 @@ class Gui:
                                               ,Rbp=float(self.entries[2].get()),conductor_p=cp)
        elif self.groundconductors_no.get()==1:
            if self.line_type.get()=="Single line configuration":
-               obj = lineparams.Single_circuit_1g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+               self.obj = lineparams.Single_circuit_1g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
                                                   ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
                                                   ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
                                                   ,a4=(float(self.entries[82].get()),float(self.entries[83].get()))\
@@ -295,7 +290,7 @@ class Gui:
                                                   ,Rbp=float(self.entries[2].get())\
                                                   ,Rbg=float(self.entries[7].get()),conductor_p=cp,conductor_g=cg)
            else:
-               obj = lineparams.Double_circuit_1g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+               self.obj = lineparams.Double_circuit_1g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
                                                  ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
                                                  ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
                                                  ,a4=(float(self.entries[52].get()),float(self.entries[53].get()))\
@@ -309,7 +304,7 @@ class Gui:
 
        else:
            if self.line_type.get()=="Single line configuration":
-               obj = lineparams.Single_circuit_2g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+               self.obj = lineparams.Single_circuit_2g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
                                                   ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
                                                   ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
                                                   ,a4=(float(self.entries[82].get()),float(self.entries[83].get()))\
@@ -319,7 +314,7 @@ class Gui:
                                                   ,Rbp=float(self.entries[2].get())\
                                                   ,Rbg=float(self.entries[7].get()),conductor_p=cp,conductor_g=cg)
            else:
-               obj = lineparams.Double_circuit_2g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+               self.obj = lineparams.Double_circuit_2g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
                                                  ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
                                                  ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
                                                  ,a4=(float(self.entries[52].get()),float(self.entries[53].get()))\
@@ -331,11 +326,12 @@ class Gui:
                                                  ,Ng=float(self.entries[10].get())\
                                                  ,Rbp=float(self.entries[2].get())\
                                                  ,Rbg=float(self.entries[7].get()),conductor_p=cp,conductor_g=cg)
-
+   def display(self):
+       self.compute()    
        np.set_printoptions(precision=3)
-       Lout = "L=\n" + str(obj.L()) + " mH/km\n"
-       Cout = "C=\n" + str(obj.C()) + " nF/km\n"
-       #print(obj.L())
+       Lout = "L=\n" + str(self.obj.L()) + " mH/km\n"
+       Cout = "C=\n" + str(self.obj.C()) + " nF/km\n"
+       #print(self.obj.L())
        self.text.config(state=NORMAL)
        self.text.delete(1.0, END)
        self.text.insert(END, "\n"+Lout+"\n"+Cout)
@@ -381,4 +377,4 @@ if __name__ == "__main__":
     root = Tk()
     root.title("EHV AC Transmission Line GUI")
     gui  = Gui(root)
-root.mainloop()
+    root.mainloop()
