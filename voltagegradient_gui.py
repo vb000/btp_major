@@ -32,24 +32,17 @@ class voltage_gradient():
            gcc = "charge coefficient matrix of ground conductors in KV=\n" \
                    + str((self.gui.obj.gcc_mat(self.v_mat))) + "\n"
        
-           self.ncp= float(self.gui.entries[5].get())#No of conductos in a phase bundle
-           self.ncg= float(self.gui.entries[10].get())#No of conductos in a phase bundle
-       
-           if self.ncp == 1:      
-               multiplier_phase = (1/(float(self.gui.entries[1].get())))
-           else:
-               multiplier_phase = (1/(2*(float(self.gui.entries[1].get())))) \
-                    +(1/(2*float(self.gui.entries[2].get())*np.sin(np.pi/(self.ncp))))
-           if self.ncg == 1:
-               multiplier_ground = (1/(float(self.gui.entries[6].get())))
-           else:
-               multiplier_ground = (1/(2*(float(self.gui.entries[6].get())))) \
-                    +(1/(2*float(self.gui.entries[7].get())*np.sin(np.pi/(self.ncg))))
-       
+           self.ncp= float(self.gui.entries[5].get())#No of conductors in a phase bundle
+           self.ncg= float(self.gui.entries[10].get())#No of conductors in a ground bundle
+      
+           phase_svg_mat = voltage_gradient_mat(self.gui.obj.pcc_mat(self.v_mat),float(self.gui.entries[1].get()),\
+                                            float(self.gui.entries[2].get()),self.ncp)
+           ground_svg_mat = voltage_gradient_mat(self.gui.obj.gcc_mat(self.v_mat),float(self.gui.entries[6].get()),\
+                                            float(self.gui.entries[7].get()),self.ncg)
            phase_svg="surface voltage gradient of phase conductors =\n" \
-                      + str((self.gui.obj.pcc_mat(self.v_mat))*multiplier_phase*1e-2) + "kv/cm\n"
+                      + str(phase_svg_mat) + "kv/cm\n"
            ground_svg="surface voltage gradient of ground conductors =\n" \
-                      + str((self.gui.obj.gcc_mat(self.v_mat))*multiplier_ground*1e-2) + "kv/cm\n"
+                      + str(ground_svg_mat) + "kv/cm\n"
            
            np.set_printoptions(precision=3)
            self.gui.text.config(state=NORMAL)
@@ -64,13 +57,10 @@ class voltage_gradient():
                    + str((self.gui.obj.pcc_mat(self.v_mat))) + "\n"
        
            self.ncp= float(self.gui.entries[5].get())#No of conductos in a phase bundle
-           if self.ncp == 1:      
-               multiplier_phase = (1/(float(self.gui.entries[1].get())))
-           else:
-               multiplier_phase = (1/(2*(float(self.gui.entries[1].get())))) \
-                    +(1/(2*float(self.gui.entries[2].get())*np.sin(np.pi/(self.ncp))))
+           phase_svg_mat = voltage_gradient_mat(self.gui.obj.pcc_mat(self.v_mat),float(self.gui.entries[1].get()),\
+                                            float(self.gui.entries[2].get()),self.ncp)
            phase_svg="surface voltage gradient of phase conductors =\n" \
-                      + str((self.gui.obj.pcc_mat(self.v_mat))*multiplier_phase*1e-2) + "kv/cm\n"
+                      + str(phase_svg_mat) + "kv/cm\n"
            
            np.set_printoptions(precision=3)
            self.gui.text.config(state=NORMAL)
