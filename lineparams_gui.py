@@ -186,14 +186,20 @@ class Gui:
        self.entries[15].pack(side=TOP,anchor=W)
        self.entries[15].insert(0,float(26))
        
-       self.groundconductor_frame=Frame(self.linegeometry_frame)
-       self.groundconductor_frame.pack(side=TOP,fill=BOTH,expand=YES)
-      
        Label(self.label_frame, text="Diameter of the strand(in M):",
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[25]=Entry(self.entry_frame,width=12,justify=CENTER)
        self.entries[25].pack(side=TOP,anchor=W)
        self.entries[25].insert(0,float(0.00444))
+       
+       Label(self.label_frame, text="Resistivity of each strand(in Ohm-M):",
+            font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[35]=Entry(self.entry_frame,width=12,justify=CENTER)
+       self.entries[35].pack(side=TOP,anchor=W)
+       self.entries[35].insert(0,float(2.7e-8))
+       
+       self.groundconductor_frame=Frame(self.linegeometry_frame)
+       self.groundconductor_frame.pack(side=TOP,fill=BOTH,expand=YES)
        
        Label(self.groundconductor_frame, text="Ground conductor and bundle parameters",\
              font=("Helvetica",12,"bold"),padx=3,pady=3,fg="blue", justify=LEFT).pack(side=TOP, anchor=W)
@@ -329,12 +335,18 @@ class Gui:
    def display(self):
        self.compute()    
        np.set_printoptions(precision=3)
+
+       p0 = float(self.entries[35].get())
+       ds = float(self.entries[25].get())
+       ns = float(self.entries[15].get())
+       Rout = "R=\n" + "{0:.3f}".format(1337*p0/(ds*ds*ns)) + " Ohm/km\n"
+       
        Lout = "L=\n" + str(self.obj.L()) + " mH/km\n"
        Cout = "C=\n" + str(self.obj.C()) + " nF/km\n"
        #print(self.obj.L())
        self.text.config(state=NORMAL)
        self.text.delete(1.0, END)
-       self.text.insert(END, "\n"+Lout+"\n"+Cout)
+       self.text.insert(END, Rout+"\n"+Lout+"\n"+Cout)
        self.text.config(state=DISABLED)
       
     
