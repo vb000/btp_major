@@ -2,7 +2,7 @@ from Tkinter import *
 import numpy as np
 import constants,lineparams
         
-class Gui:
+class lineparams_gui():
    """calculates transmission line parameters"""
    def __init__(self,parent):
 
@@ -388,5 +388,5 @@ class Gui:
 if __name__ == "__main__":
     root = Tk()
     root.title("EHV AC Transmission Line GUI")
-    gui  = Gui(root)
+    gui  = lineparams_gui(root)
     root.mainloop()

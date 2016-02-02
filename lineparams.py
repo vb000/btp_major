@@ -327,9 +327,6 @@ class Double_circuit_2g:
        return abs(reduce(np.dot,[np.linalg.inv(self.Pgg()),self.Pgp(),\
                   np.dot(np.linalg.inv(self.P_red()),np.concatenate((v_mat,v_mat),axis=0))])) # Kv"""
 
-def voltage_gradient_mat(cc_mat,r,R,N):
-    multiplier = ((1/r)+(N-1)*(1/(R)))/N
-    return cc_mat*multiplier*1e-2 # Kv/cm
 
 if __name__=="__main__":
    conductor_p=ACSR(Reff=0.01585)
