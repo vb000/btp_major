@@ -73,9 +73,9 @@ class voltage_gradient():
            ep= (21.4/1.3)*(1+0.301/np.sqrt(float(self.gui.entries[1].get())*1e2))
            eg= (21.4/1.3)*(1+0.301/np.sqrt(float(self.gui.entries[6].get())*1e2))
            pcig="corona inception gradient of phase conductors =\n" \
-                   + str(ep) + "kv/cm\n"
+                   + "{0:.03f}".format(ep) + " kv/cm\n"
            gcig="corona inception gradient of ground conductor =\n" \
-                   + str(eg) + "kv/cm\n"
+                   + "{0:.03f}".format(eg) + " kv/cm\n"
            
            np.set_printoptions(precision=3)
            self.gui.text.config(state=NORMAL)
