@@ -15,7 +15,7 @@ class lineparams_gui():
        self.lineselection_frame = Frame(parent,relief=RIDGE,borderwidth=2,height=50)
        self.lineselection_frame.pack(side=TOP,expand=NO,fill=X)
 
-       self.input_frame = Frame(parent,relief=RIDGE,borderwidth=2,height=300)
+       self.input_frame = Frame(parent,relief=RIDGE,borderwidth=2,height=200)
        self.input_frame.pack(side=TOP,expand=NO,fill=BOTH)
        
        self.output_frame = Frame(parent,relief=RIDGE,borderwidth=2,height=50)
@@ -26,15 +26,28 @@ class lineparams_gui():
 
        self.result_frame=Frame(self.input_frame,relief=RIDGE,borderwidth=1,height=400)
        self.result_frame.pack(side=LEFT,expand=YES,fill=BOTH,padx=10,pady=5,ipadx=5,ipady=5)
+       
      
-       self.power_frame=Frame(self.result_frame,relief=RIDGE,borderwidth=1,height=400)
-       self.power_frame.pack(side=LEFT,expand=YES,fill=BOTH,padx=10,pady=5,ipadx=5,ipady=5)
+       self.op_frame=Frame(self.result_frame,borderwidth=1,height=400)
+       self.op_frame.pack(side=LEFT,expand=YES,fill=BOTH)
+       
+       self.power_frame=Frame(self.op_frame,relief=RIDGE,borderwidth=1)
+       self.power_frame.pack(side=TOP,expand=NO,fill=BOTH)
+       
+       self.em_frame=Frame(self.op_frame,relief=RIDGE,borderwidth=1)
+       self.em_frame.pack(side=TOP,expand=YES,fill=BOTH,pady=10)
        
        self.labelpower_frame=Frame(self.power_frame)
-       self.labelpower_frame.pack(side=LEFT,expand=YES,fill=BOTH)
+       self.labelpower_frame.pack(side=LEFT,expand=YES,fill=BOTH,padx=5)
      
        self.entrypower_frame=Frame(self.power_frame,padx=3,pady=3)
        self.entrypower_frame.pack(side=TOP,expand=YES,fill=BOTH)
+       
+       self.labelem_frame=Frame(self.em_frame)
+       self.labelem_frame.pack(side=LEFT,expand=YES,fill=BOTH,padx=5)
+     
+       self.entryem_frame=Frame(self.em_frame,padx=3,pady=3)
+       self.entryem_frame.pack(side=LEFT,expand=YES,fill=BOTH)
       
        self.entries = {}
        Label(self.labelpower_frame, text="Power Rating(in MW):",\
@@ -55,10 +68,28 @@ class lineparams_gui():
        self.entries[40]=Entry(self.entrypower_frame,width=12,justify=CENTER)
        self.entries[40].pack(side=TOP,anchor=W)
        self.entries[40].insert(0,float(200))
+       
+       Label(self.labelem_frame, text="Measure Electricfield at x coordinate:",\
+             font=("Times",11),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[101]=Entry(self.entryem_frame,width=12,justify=CENTER)
+       self.entries[101].pack(side=TOP,anchor=W)
+       self.entries[101].insert(0,float(0))
 
+       Label(self.labelem_frame, text="                                     y coordinate:",\
+            font=("Times",11),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[102]=Entry(self.entryem_frame,width=12,justify=CENTER)
+       self.entries[102].pack(side=TOP,anchor=W)
+       self.entries[102].insert(0,float(2))
+
+
+       Label(self.labelem_frame, text="Plot Electric field at height(in m):",\
+            font=("Times",11),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[103]=Entry(self.entryem_frame,width=12,justify=CENTER)
+       self.entries[103].pack(side=TOP,anchor=W)
+       self.entries[103].insert(0,float(2.0))
 
        Label(self.lineselection_frame, text="Transmission line configuration type:",
-            font=("Times",14,"bold"),padx=3,pady=3, justify=LEFT).pack(side=LEFT, anchor=W)
+            font=("Courier New",14,"bold"),padx=3,pady=3, justify=LEFT).pack(side=LEFT, anchor=W)
        
        line_types = ["Single line configuration","Double line configuration"]
        
@@ -143,7 +174,7 @@ class lineparams_gui():
      
       
        self.label_frame=Frame(self.bundle_frame)
-       self.label_frame.pack(side=LEFT,expand=YES,fill=BOTH)
+       self.label_frame.pack(side=LEFT,expand=YES,fill=BOTH,padx=5)
      
        self.entry_frame=Frame(self.bundle_frame,padx=3,pady=3)
        self.entry_frame.pack(side=TOP,expand=YES,fill=BOTH)
@@ -209,7 +240,7 @@ class lineparams_gui():
      
       
        self.labelg_frame=Frame(self.bundleg_frame)
-       self.labelg_frame.pack(side=LEFT,expand=YES,fill=BOTH)
+       self.labelg_frame.pack(side=LEFT,expand=YES,fill=BOTH,padx=5)
      
        self.entryg_frame=Frame(self.bundleg_frame,padx=3,pady=3)
        self.entryg_frame.pack(side=TOP,expand=YES,fill=BOTH)
@@ -258,11 +289,16 @@ class lineparams_gui():
        self.entries[26].pack(side=TOP,anchor=W)
        self.entries[26].insert(0,float(0.00444))
        
-       self.computeRLC_button=Button(self.output_frame,text="Compute RLC parameters",command=self.display)
+       self.computeRLC_button=Button(self.output_frame,text="Compute RLC parameters",\
+                                     font=("Fixedsys",9,"bold"),command=self.display)
        self.computeRLC_button.pack(side=LEFT)
+       
+       #self.display_frame=(self.result_frame)
+       #self.display_frame.pack(side=LEFT,expand=0, fill=BOTH)
+       
 
        self.text=Text(self.result_frame)
-       self.text.pack(expand=TRUE, fill='both')
+       self.text.pack(side=TOP,expand=1, fill=BOTH)
 
 
    def compute_lineobj(self):
