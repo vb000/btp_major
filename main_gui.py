@@ -30,6 +30,9 @@ class performanceparams_gui(lineparams_gui):
                                      font=("Fixedsys",9,"bold"),command=self.compute_display_ef)
        self.Electricfield_button.pack(side=LEFT,padx=5)
        
+       self.Magneticfield_button = Button(self.output_frame,text="Magnetic field",\
+                                     font=("Fixedsys",9,"bold"),command=self.compute_display_mf)
+       self.Magneticfield_button.pack(side=LEFT,padx=5)
        
    def compute_vg(self):
        self.phase_voltage = float(self.entries[30].get())/np.sqrt(3)
@@ -164,6 +167,67 @@ class performanceparams_gui(lineparams_gui):
            ax = plt.gca()
            ax.spines['left'].set_position(('data',0))
            plt.plot(np.array(m),np.array(f),label="Electric field-II in Kv/m")
+           plt.legend(loc='best')
+           plt.show()
+   
+   def compute_display_mf(self):
+       #ground conductors excluded..as charge on them is usually very small
+       cp=constants.ACSR(float(self.entries[4].get()),float(self.entries[1].get()),float(self.entries[3].get()))  
+       self.phase_current = float(self.entries[50].get())*(1e+3)
+       self.c_mat = np.array([[cmath.rect(self.phase_current,np.pi*0/180)],\
+                              [cmath.rect(self.phase_current,np.pi*-120/180)],\
+                              [cmath.rect(self.phase_current,np.pi*120/180)]])                      
+       if self.line_type.get()=="Single line configuration":
+           self.lineobj = lineparams.Single_circuit(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+                                              ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
+                                              ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
+                                              ,Np=float(self.entries[5].get())\
+                                              ,Rbp=float(self.entries[2].get()),conductor_p=cp)
+           self.a = (self.lineobj.a1,self.lineobj.a2,self.lineobj.a3)
+           self.p = (float(self.entries[104].get()),float(self.entries[105].get()))
+           self.smf = magnetic_field_single(self.c_mat,self.a,self.p)
+           self.text.config(state=NORMAL)
+           self.text.delete(1.0, END)
+           self.text.insert(END, "\nMagnetic field at given coordinates is:\n"+str(self.smf)+" mG\n")
+           self.text.config(state=DISABLED)  
+           h = float(self.entries[106].get())
+           x = list(range(-30,30,1))
+           f = []
+           for i in x:
+               f.append(magnetic_field_single(self.c_mat,self.a,(i,h))[0][0])
+           m = [float(i) for i in x]
+           ax = plt.gca()
+           ax.spines['left'].set_position(('data',0))
+           plt.plot(np.array(m),np.array(f),label="Magnetic field-I in mG")
+           plt.legend(loc='best')
+           plt.show()
+           
+       else:
+           self.lineobj = lineparams.Double_circuit(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+                                              ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
+                                              ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
+                                              ,a4=(float(self.entries[52].get()),float(self.entries[53].get()))\
+                                              ,a5=(float(self.entries[62].get()),float(self.entries[63].get()))\
+                                              ,a6=(float(self.entries[72].get()),float(self.entries[73].get()))\
+                                              ,Np=float(self.entries[5].get())\
+                                              ,Rbp=float(self.entries[2].get()),conductor_p=cp)
+           self.a = (self.lineobj.a1,self.lineobj.a2,self.lineobj.a3,\
+                     self.lineobj.a4,self.lineobj.a5,self.lineobj.a6)
+           self.p = (float(self.entries[104].get()),float(self.entries[105].get()))
+           self.smf = magnetic_field_double(self.c_mat,self.a,self.p)
+           self.text.config(state=NORMAL)
+           self.text.delete(1.0, END)
+           self.text.insert(END, "\nMagnetic field at given coordinates is:\n"+str(self.smf)+" mG\n")
+           self.text.config(state=DISABLED)
+           h = float(self.entries[106].get())
+           x = list(range(-30,30,1))
+           f = []
+           for i in x:
+               f.append(magnetic_field_double(self.c_mat,self.a,(i,h))[0][0])
+           m = [float(i) for i in x]
+           ax = plt.gca()
+           ax.spines['left'].set_position(('data',0))
+           plt.plot(np.array(m),np.array(f),label="Magnetic field-II in mG")
            plt.legend(loc='best')
            plt.show()
        

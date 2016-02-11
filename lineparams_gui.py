@@ -61,6 +61,12 @@ class lineparams_gui():
        self.entries[30]=Entry(self.entrypower_frame,width=12,justify=CENTER)
        self.entries[30].pack(side=TOP,anchor=W)
        self.entries[30].insert(0,float(420))
+       
+       Label(self.labelpower_frame, text="Phase current(in kA):",\
+            font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[50]=Entry(self.entrypower_frame,width=12,justify=CENTER)
+       self.entries[50].pack(side=TOP,anchor=W)
+       self.entries[50].insert(0,float(1.5))
 
 
        Label(self.labelpower_frame, text="Length of Transmission Line(in kM):",\
@@ -86,7 +92,26 @@ class lineparams_gui():
             font=("Times",11),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[103]=Entry(self.entryem_frame,width=12,justify=CENTER)
        self.entries[103].pack(side=TOP,anchor=W)
-       self.entries[103].insert(0,float(2.0))
+       self.entries[103].insert(0,float(0.0))
+       
+       Label(self.labelem_frame, text="Measure Magnetic field at x coordinate:",\
+             font=("Times",11),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[104]=Entry(self.entryem_frame,width=12,justify=CENTER)
+       self.entries[104].pack(side=TOP,anchor=W)
+       self.entries[104].insert(0,float(0))
+
+       Label(self.labelem_frame, text="                                        y coordinate:",\
+            font=("Times",11),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[105]=Entry(self.entryem_frame,width=12,justify=CENTER)
+       self.entries[105].pack(side=TOP,anchor=W)
+       self.entries[105].insert(0,float(2))
+
+
+       Label(self.labelem_frame, text="Plot Magnetic field at height(in m):",\
+            font=("Times",11),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[106]=Entry(self.entryem_frame,width=12,justify=CENTER)
+       self.entries[106].pack(side=TOP,anchor=W)
+       self.entries[106].insert(0,float(0.0))
 
        Label(self.lineselection_frame, text="Transmission line configuration type:",
             font=("Courier New",14,"bold"),padx=3,pady=3, justify=LEFT).pack(side=LEFT, anchor=W)
