@@ -48,6 +48,13 @@ def electric_field_single(cc_mat,a,p):
     ev = abs(np.dot(cc_mat,K_mat_single(a,p)))
     return np.sqrt(eh**2.0+ev**2.0)
 
+def magnetic_field_single(c_mat,a,p):
+        #c_mat is phase current matrix
+        mh = abs(np.dot(c_mat.transpose(),K_mat_single(a,p)))
+        mv = abs(np.dot(c_mat.transpose(),J_mat_single(a,p)))
+        return 2*(np.sqrt(mh**2.0+mv**2.0)) # in milli Gauss.Gauss=10^-4 Tesla
+        
+
 def J_mat_double(a,p):#calculates J matrix used in the calculation of fields
     # a is the tuple of coordiante tuples
     # p is the measurement point cordinates
@@ -75,4 +82,10 @@ def electric_field_double(cc_mat,a,p):
     eh = abs(np.dot(cc_mat,J_mat_double(a,p)))
     ev = abs(np.dot(cc_mat,K_mat_double(a,p)))
     return np.sqrt(eh**2.0+ev**2.0)
+
+def magnetic_field_double(c_mat,a,p):
+        #c_mat is phase current matrix
+        mh = abs(np.dot((np.concatenate((c_mat,c_mat),axis=0)).transpose(),K_mat_double(a,p)))
+        mv = abs(np.dot((np.concatenate((c_mat,c_mat),axis=0)).transpose(),J_mat_double(a,p)))
+        return 2*(np.sqrt(mh**2.0+mv**2.0)) # in milli Gauss.Gauss=10^-4 Tesla
 
