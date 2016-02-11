@@ -4,6 +4,18 @@ from constants import *
 from lineparams import *
 from main_gui import *
 
+def audio_noise(a, x, h, d, Np, Vg):
+    n = len(a)
+    
+    ANi = np.zeros(n) # initialize ANi  
+    for i in range(n):
+        D = float(np.sqrt((a[i][0]-x)**2.0 + (a[i][1]-h)**2.0))
+        ANi[i] = ((120*np.log(Vg[i]) + 55*np.log(d) - 11.4*np.log(D)) / np.log(10)) +\
+                  (-115.4 if (Np<3) else (26.4*np.log(Np)/np.log(10) - 128.4))
+
+    return 10 * np.log(np.sum(10**(0.1*ANi))) / np.log(10) # dB 
+
+
 def voltage_gradient_mat(cc_mat,r,R,N):
     multiplier = ((1/r)+(N-1)*(1/(R)))/N
     return cc_mat*multiplier*1e-2 # Kv/cm
@@ -31,10 +43,10 @@ def K_mat_single(a,p):#calculates k matrix used in the calculation of fields
     return K_mat.transpose()
 
 def electric_field_single(cc_mat,a,p):
-        #cc_mat is charge coefficient matrix
-        eh = abs(np.dot(cc_mat,J_mat_single(a,p)))
-        ev = abs(np.dot(cc_mat,K_mat_single(a,p)))
-        return np.sqrt(eh**2.0+ev**2.0)
+    #cc_mat is charge coefficient matrix
+    eh = abs(np.dot(cc_mat,J_mat_single(a,p)))
+    ev = abs(np.dot(cc_mat,K_mat_single(a,p)))
+    return np.sqrt(eh**2.0+ev**2.0)
 
 def J_mat_double(a,p):#calculates J matrix used in the calculation of fields
     # a is the tuple of coordiante tuples
@@ -59,8 +71,8 @@ def K_mat_double(a,p):#calculates k matrix used in the calculation of fields
     return K_mat.transpose()
 
 def electric_field_double(cc_mat,a,p):
-        #cc_mat is charge coefficient matrix
-        eh = abs(np.dot(cc_mat,J_mat_double(a,p)))
-        ev = abs(np.dot(cc_mat,K_mat_double(a,p)))
-        return np.sqrt(eh**2.0+ev**2.0)
+    #cc_mat is charge coefficient matrix
+    eh = abs(np.dot(cc_mat,J_mat_double(a,p)))
+    ev = abs(np.dot(cc_mat,K_mat_double(a,p)))
+    return np.sqrt(eh**2.0+ev**2.0)
 
