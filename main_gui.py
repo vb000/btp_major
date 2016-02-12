@@ -73,12 +73,12 @@ class performanceparams_gui(lineparams_gui):
         d  = 2*100*self.lineobj.conductor_p.r # diameter of condcutor in cm
 
         # audio noise
-        h = 0   # fixme: place a entry here
+        h = float(self.entries[107].get())
         self.corona_axis = list(range(-30, 30, 1))
         self.an_vals = [audio_noise(a, x, h, d, Np, self.phase_svg_mat) for x in self.corona_axis] # audio noise values in dB
        
         # TODO: radio noise
-
+        #h = float(self.entries[108].get()) for Radio Noise
 
 
     def display_vg(self):

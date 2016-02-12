@@ -75,6 +75,18 @@ class lineparams_gui():
        self.entries[40].pack(side=TOP,anchor=W)
        self.entries[40].insert(0,float(200))
        
+       Label(self.labelem_frame, text="Plot Audible Noise at height(in m):",\
+            font=("Times",11),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[107]=Entry(self.entryem_frame,width=12,justify=CENTER)
+       self.entries[107].pack(side=TOP,anchor=W)
+       self.entries[107].insert(0,float(0.0))
+       
+       Label(self.labelem_frame, text="Plot Radio Noise at height(in m):",\
+            font=("Times",11),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[108]=Entry(self.entryem_frame,width=12,justify=CENTER)
+       self.entries[108].pack(side=TOP,anchor=W)
+       self.entries[108].insert(0,float(0.0))
+       
        Label(self.labelem_frame, text="Measure Electricfield at x coordinate:",\
              font=("Times",11),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[101]=Entry(self.entryem_frame,width=12,justify=CENTER)
@@ -86,8 +98,7 @@ class lineparams_gui():
        self.entries[102]=Entry(self.entryem_frame,width=12,justify=CENTER)
        self.entries[102].pack(side=TOP,anchor=W)
        self.entries[102].insert(0,float(2))
-
-
+       
        Label(self.labelem_frame, text="Plot Electric field at height(in m):",\
             font=("Times",11),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[103]=Entry(self.entryem_frame,width=12,justify=CENTER)
