@@ -71,14 +71,16 @@ class performanceparams_gui(lineparams_gui):
 
         Np = self.lineobj.Np # no. of conductors in the bundle
         d  = 2*100*self.lineobj.conductor_p.r # diameter of condcutor in cm
+        self.corona_axis = list(np.linspace(-30.0, 30.0, 100))
 
         # audio noise
-        h = float(self.entries[107].get())
-        self.corona_axis = list(range(-30, 30, 1))
-        self.an_vals = [audio_noise(a, x, h, d, Np, self.phase_svg_mat) for x in self.corona_axis] # audio noise values in dB
+        h_a = float(self.entries[107].get()) # height at which audio noise should be measured
+        self.an_vals = [audio_noise(a, x, h_a, d, Np, self.phase_svg_mat) for x in self.corona_axis] # audio noise values in dB
        
-        # TODO: radio noise
-        #h = float(self.entries[108].get()) for Radio Noise
+        # radio noise
+        h_r = float(self.entries[108].get()) # height at which radio noise should be measured
+        self.rn_vals = [radio_noise(a, x, h_r, d, Np, self.phase_svg_mat) for x in self.corona_axis] # radio noise values in dB
+
 
 
     def display_vg(self):
@@ -131,9 +133,18 @@ class performanceparams_gui(lineparams_gui):
         self.text.insert(END, "\n"+pcig+"\n")
         self.text.insert(END, "\n"+gcig+"\n")
         self.text.config(state=DISABLED)  
-
+        
+        plt.figure(1)
         plt.plot(self.corona_axis, self.an_vals, label="Audio Noise due to corona")
-        plt.legend(loc='best')
+        plt.title('Audio Noise due to corona');
+        plt.xlabel('Distance from the tower (m)');
+        plt.ylabel('Audio noise (dB)');
+        
+        plt.figure(2)
+        plt.plot(self.corona_axis, self.rn_vals, label="Radio Noise due to corona")
+        plt.title('Radio Noise due to corona');
+        plt.xlabel('Distance from the tower (m)');
+        plt.ylabel('Radio noise (dB)');
         plt.show()
 
     def compute_display_ef(self):

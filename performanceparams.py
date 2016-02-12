@@ -13,7 +13,24 @@ def audio_noise(a, x, h, d, Np, Vg):
         ANi[i] = ((120*np.log(Vg[i]) + 55*np.log(d) - 11.4*np.log(D)) / np.log(10)) +\
                   (-115.4 if (Np<3) else (26.4*np.log(Np)/np.log(10) - 128.4))
 
-    return 10 * np.log(np.sum(10**(0.1*ANi))) / np.log(10) # dB 
+    return 10 * np.log(np.sum(10**(0.1*ANi))) / np.log(10) # dB
+
+
+def radio_noise(a, x, h, d, Np, Vg):
+    n = len(a)
+
+    RIi = np.zeros(n)
+    for i in range(n):
+        D = float(np.sqrt((a[i][0]-x)**2.0 + (a[i][1]-h)**2.0))
+        RIi[i] = (3.5*Vg[i] + 6*d - 33*np.log(D/20)/np.log(10) - 30)
+
+    if n==6:
+        RIi = 10**(RIi/20) # dB to uV/m
+        for i in range(3):
+            RIi[i] = 20*np.log( (RIi[i]**2 + RIi[i+3]**2)**0.5 )
+
+    RIi.sort()
+    return RIi[2] if (RIi[2]-RIi[1] >= 3) else ((RIi[2]+RIi[1])/2 + 1.5) # dB
 
 
 def voltage_gradient_mat(cc_mat,r,R,N):
