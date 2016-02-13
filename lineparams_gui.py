@@ -337,27 +337,11 @@ class lineparams_gui():
        self.text.pack(side=TOP,expand=1, fill=BOTH)
 
 
-   def compute_lineobj(self):
+   def compute_lineobj(self,ground_wires):# ground_wires  is whether to consider ground wires or not. 
        self.lineobj = None
        cp=constants.ACSR(float(self.entries[4].get()),float(self.entries[1].get()),float(self.entries[3].get()))
        cg=constants.ACSR(float(self.entries[9].get()),float(self.entries[6].get()),float(self.entries[8].get()))
-       if self.groundconductors_no.get()==0:
-           if self.line_type.get()=="Single line configuration":
-               self.lineobj = lineparams.Single_circuit(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
-                                              ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
-                                              ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
-                                              ,Np=float(self.entries[5].get())\
-                                              ,Rbp=float(self.entries[2].get()),conductor_p=cp)
-           else:
-               self.lineobj = lineparams.Double_circuit(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
-                                              ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
-                                              ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
-                                              ,a4=(float(self.entries[52].get()),float(self.entries[53].get()))\
-                                              ,a5=(float(self.entries[62].get()),float(self.entries[63].get()))\
-                                              ,a6=(float(self.entries[72].get()),float(self.entries[73].get()))\
-                                              ,Np=float(self.entries[5].get())\
-                                              ,Rbp=float(self.entries[2].get()),conductor_p=cp)
-       elif self.groundconductors_no.get()==1:
+       if self.groundconductors_no.get()==1 and ground_wires == True :
            if self.line_type.get()=="Single line configuration":
                self.lineobj = lineparams.Single_circuit_1g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
                                                   ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
@@ -380,7 +364,7 @@ class lineparams_gui():
                                                  ,Rbp=float(self.entries[2].get())\
                                                  ,Rbg=float(self.entries[7].get()),conductor_p=cp,conductor_g=cg)
 
-       else:
+       elif self.groundconductors_no.get()==2 and ground_wires == True :
            if self.line_type.get()=="Single line configuration":
                self.lineobj = lineparams.Single_circuit_2g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
                                                   ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
@@ -404,8 +388,25 @@ class lineparams_gui():
                                                  ,Ng=float(self.entries[10].get())\
                                                  ,Rbp=float(self.entries[2].get())\
                                                  ,Rbg=float(self.entries[7].get()),conductor_p=cp,conductor_g=cg)
+       else:
+           if self.line_type.get()=="Single line configuration":
+               self.lineobj = lineparams.Single_circuit(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+                                              ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
+                                              ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
+                                              ,Np=float(self.entries[5].get())\
+                                              ,Rbp=float(self.entries[2].get()),conductor_p=cp)
+           else:
+               self.lineobj = lineparams.Double_circuit(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+                                              ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
+                                              ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
+                                              ,a4=(float(self.entries[52].get()),float(self.entries[53].get()))\
+                                              ,a5=(float(self.entries[62].get()),float(self.entries[63].get()))\
+                                              ,a6=(float(self.entries[72].get()),float(self.entries[73].get()))\
+                                              ,Np=float(self.entries[5].get())\
+                                              ,Rbp=float(self.entries[2].get()),conductor_p=cp)
+          
    def display(self):
-       self.compute_lineobj()    
+       self.compute_lineobj(True)    
        np.set_printoptions(precision=3)
 
        p0 = float(self.entries[35].get())
