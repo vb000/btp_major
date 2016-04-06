@@ -30,6 +30,36 @@ class performanceparams_gui(lineparams_gui):
         self.Magneticfield_button = Button(self.output_frame,text="Magnetic field",\
                                      font=("Fixedsys",9,"bold"),command=self.compute_display_mf)
         self.Magneticfield_button.pack(side=LEFT,padx=5)
+
+        self.VolProfile_button = Button(self.output_frame,text="Voltage Profile",\
+                                     font=("Fixedsys",9,"bold"),command=self.compute_display_volprof)
+        self.VolProfile_button.pack(side=LEFT,padx=5)
+
+    def compute_display_volprof(self):
+        self.compute_lineobj(True)
+        p0 = float(self.entries[35].get())
+        ds = float(self.entries[25].get())
+        ns = float(self.entries[15].get())
+        R  = 1337*p0/(ds*ds*ns)
+        phase_current = float(float(self.entries[20].get()) / \
+                              (np.sqrt(3) * float(self.entries[30].get())))
+
+        L = int(float(self.entries[40].get()))
+        distance = range(L, -1, -1)
+
+        es = []
+        for d in range(L, 0, -1):
+            abcd = ABCDparams(50, R, self.lineobj.L()*(1e-3), self.lineobj.C()*(1e-9), d)
+            es.append(abs(abcd[0][0]*float(self.entries[30].get()) + abcd[0][1]*phase_current))
+        es.append(float(self.entries[30].get()))
+        es.reverse()
+
+        plt.figure(1)
+        plt.plot(distance, es, label="Vlotage Profile")
+        plt.title('Voltage');
+        plt.xlabel('Distance from sending end (km)');
+        plt.legend(loc='best')
+        plt.show()
        
     def compute_vg(self,ground_wires):
         self.phase_voltage = float(self.entries[30].get())/np.sqrt(3)
@@ -203,7 +233,9 @@ class performanceparams_gui(lineparams_gui):
     def compute_display_mf(self):
         #ground conductors excluded..as charge on them is usually very small
         self.compute_lineobj(False) 
-        self.phase_current = float(self.entries[50].get())*(1e+3)
+        phase_current = float(float(self.entries[20].get()) / \
+                              (np.sqrt(3) * float(self.entries[30].get())))
+        self.phase_current = float(phase_current)*(1e+3)
         self.c_mat = np.array([[cmath.rect(self.phase_current,np.pi*0/180)],\
                               [cmath.rect(self.phase_current,np.pi*-120/180)],\
                               [cmath.rect(self.phase_current,np.pi*120/180)]])                      

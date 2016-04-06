@@ -60,14 +60,18 @@ class lineparams_gui():
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[30]=Entry(self.entrypower_frame,width=12,justify=CENTER)
        self.entries[30].pack(side=TOP,anchor=W)
-       self.entries[30].insert(0,float(420))
+       self.entries[30].insert(0,float(400))
        
-       Label(self.labelpower_frame, text="Phase current(in kA):",\
-            font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
-       self.entries[50]=Entry(self.entrypower_frame,width=12,justify=CENTER)
-       self.entries[50].pack(side=TOP,anchor=W)
-       self.entries[50].insert(0,float(1.5))
-
+       
+       #phase_current = float(float(self.entries[20].get()) / \
+       #                      (np.sqrt(3) * float(self.entries[30].get())))
+       #self.entries[50] = phase_current
+       #Label(self.labelpower_frame, text="Phase current(in kA):",\
+       #    font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       #self.entries[50]= Entry(self.entrypower_frame,width=12,justify=CENTER)
+       #self.entries[50].pack(side=TOP,anchor=W)
+       #self.entries[50].insert(0, "{0:.3f}".format(phase_current))
+       #self.entries[50].configure(state='readonly')
 
        Label(self.labelpower_frame, text="Length of Transmission Line(in kM):",\
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)

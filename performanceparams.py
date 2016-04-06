@@ -4,6 +4,36 @@ from constants import *
 from lineparams import *
 from main_gui import *
 
+def ABCDparams(f, r, l, c, L):
+    diagsuml = 0
+    for i in range(len(l)):
+        diagsuml = (diagsuml + l[i][i])
+    uppersuml = (l.sum() - diagsuml)/2
+
+    ls = diagsuml / len(l)
+    lm = (2*uppersuml) / ((len(l)*len(l)) - len(l))
+    lp = ls - lm
+
+    diagsumc = 0
+    for i in range(len(c)):
+        diagsumc = (diagsumc + c[i][i])
+    uppersumc = (c.sum() - diagsumc)/2
+
+    cs = diagsumc / len(c)
+    cm = (2*uppersumc) / ((len(c)*len(c)) - len(c))
+    cp = cs - cm
+
+    Z = (r + 1j * (2*np.pi*f) * lp) * L
+    Y = (1j*(2*np.pi*f)*cp) * L
+
+    A = np.cosh(np.sqrt(Z*Y))
+    B = np.sqrt(Z/Y) * np.sinh(np.sqrt(Z*Y))
+    C = np.sqrt(Y/Z) * np.sinh(np.sqrt(Z*Y))
+    D = A
+    
+    #print A,B,C,D,Z,Y
+    return np.array([[A, B], [C, D]], dtype=complex)
+
 def audio_noise(a, x, h, d, Np, Vg):
     n = len(a)
     
