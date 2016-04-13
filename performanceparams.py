@@ -32,7 +32,7 @@ def ABCDparams(f, r, l, c, L):
     D = A
     
     #print A,B,C,D,Z,Y
-    return np.array([[A, B], [C, D]], dtype=complex)
+    return np.array([[A, B], [C, D]])
 
 def audio_noise(a, x, h, d, Np, Vg):
     n = len(a)

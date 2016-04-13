@@ -35,18 +35,64 @@ class performanceparams_gui(lineparams_gui):
                                      font=("Fixedsys",9,"bold"),command=self.compute_display_volprof)
         self.VolProfile_button.pack(side=LEFT,padx=5)
 
+        self.VolProfile_button = Button(self.output_frame,text="Compensation",\
+                                     font=("Fixedsys",9,"bold"),command=self.compute_display_compensation)
+        self.VolProfile_button.pack(side=LEFT,padx=5)
+
+    def compute_display_compensation(self):
+        self.compute_lineobj(True)
+        p0 = float(self.entries[35].get())
+        ds = float(self.entries[25].get())
+        ns = float(self.entries[15].get())
+        R  = 1337*p0/(ds*ds*ns)
+
+        Pow       = float(self.entries[20].get())
+        V         = float(self.entries[30].get())
+        L         = int(float(self.entries[40].get()))
+        PowFactor = float(self.entries[60].get())
+        loadAngle = np.arccos(PowFactor)
+
+        phase_current = cmath.rect((Pow/(PowFactor*np.sqrt(3)*V)), loadAngle)
+        abcd = ABCDparams(50, R, self.lineobj.L()*(1e-3), self.lineobj.C()*(1e-9), L)
+        abs_A = abs(abcd[0][0])
+        alpha = cmath.phase(abcd[0][0])
+        abs_B = abs(abcd[0][1])
+        beta  = cmath.phase(abcd[0][1])
+
+        delta = beta - np.arccos((abs_B/(V*V)) * \
+                                  (Pow + abs_A*V*V*np.cos(beta-alpha)/abs_B))
+
+        Qr = ((V*V/abs_B)*np.sin(beta-delta)) - (abs_A*V*V*np.sin(beta-alpha)/abs_B)
+        Ql = Pow*np.tan(np.arccos(PowFactor))
+        Qc = Qr - Ql
+        
+        Aout = "A = " + str('({0.real:.3f} + {0.imag:.3f}j)'.format((abcd[0][0]))) + "\n"
+        Bout = "B = " + str('({0.real:.3f} + {0.imag:.3f}j)'.format((abcd[0][1]))) + "\n"
+        Cout = "C = " + str('({0.real:.3f} + {0.imag:.3f}j)'.format((abcd[1][0]))) + "\n"
+        Dout = "D = " + str('({0.real:.3f} + {0.imag:.3f}j)'.format((abcd[1][1]))) + "\n"
+        QcOut    = "compensation required = \n" + str("{0:.3f}".format(Qc)) + " MVAR\n"
+        deltaOut = "Power angle = \n" + str("{0:.3f}".format(delta)) + " rad\n"
+        self.text.config(state=NORMAL)
+        self.text.delete(1.0, END)
+        self.text.insert(END, Aout+"\n"+Bout+"\n"+Cout+"\n"+Dout+"\n"+QcOut+"\n"+deltaOut)
+        self.text.config(state=DISABLED)
+
     def compute_display_volprof(self):
         self.compute_lineobj(True)
         p0 = float(self.entries[35].get())
         ds = float(self.entries[25].get())
         ns = float(self.entries[15].get())
         R  = 1337*p0/(ds*ds*ns)
-        phase_current = float(float(self.entries[20].get()) / \
-                              (np.sqrt(3) * float(self.entries[30].get())))
 
-        L = int(float(self.entries[40].get()))
+        Pow       = float(self.entries[20].get())
+        V         = float(self.entries[30].get())
+        L         = int(float(self.entries[40].get()))
+        PowFactor = float(self.entries[60].get())
+        loadAngle = np.arccos(PowFactor)
+
+        phase_current = cmath.rect((Pow/(PowFactor*np.sqrt(3)*V)), loadAngle)
+
         distance = range(L, -1, -1)
-
         es = []
         for d in range(L, 0, -1):
             abcd = ABCDparams(50, R, self.lineobj.L()*(1e-3), self.lineobj.C()*(1e-9), d)

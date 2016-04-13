@@ -1,7 +1,7 @@
 from Tkinter import *
 import numpy as np
 import constants,lineparams
-        
+
 class lineparams_gui():
    """calculates transmission line parameters"""
    def __init__(self,parent):
@@ -56,13 +56,12 @@ class lineparams_gui():
        self.entries[20].pack(side=TOP,anchor=W)
        self.entries[20].insert(0,float(1000))
 
-       Label(self.labelpower_frame, text="Voltage Rating(in KV):",\
+       Label(self.labelpower_frame, text="Voltage Rating (in KV):",\
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[30]=Entry(self.entrypower_frame,width=12,justify=CENTER)
        self.entries[30].pack(side=TOP,anchor=W)
        self.entries[30].insert(0,float(400))
-       
-       
+        
        #phase_current = float(float(self.entries[20].get()) / \
        #                      (np.sqrt(3) * float(self.entries[30].get())))
        #self.entries[50] = phase_current
@@ -78,6 +77,12 @@ class lineparams_gui():
        self.entries[40]=Entry(self.entrypower_frame,width=12,justify=CENTER)
        self.entries[40].pack(side=TOP,anchor=W)
        self.entries[40].insert(0,float(200))
+       
+       Label(self.labelpower_frame, text="Load power factor:",\
+            font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
+       self.entries[60]=Entry(self.entrypower_frame,width=12,justify=CENTER)
+       self.entries[60].pack(side=TOP,anchor=W)
+       self.entries[60].insert(0,float(1))
        
        Label(self.labelem_frame, text="Plot Audible Noise at height(in m):",\
             font=("Times",11),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
@@ -340,74 +345,108 @@ class lineparams_gui():
        self.text=Text(self.result_frame)
        self.text.pack(side=TOP,expand=1, fill=BOTH)
 
-
-   def compute_lineobj(self,ground_wires):# ground_wires  is whether to consider ground wires or not. 
+   # ground_wires  is whether to consider ground wires or not. 
+   def compute_lineobj(self,ground_wires):
        self.lineobj = None
-       cp=constants.ACSR(float(self.entries[4].get()),float(self.entries[1].get()),float(self.entries[3].get()))
-       cg=constants.ACSR(float(self.entries[9].get()),float(self.entries[6].get()),float(self.entries[8].get()))
+
+       cp=constants.ACSR(float(self.entries[4].get())\
+                         ,float(self.entries[1].get())\
+                         ,float(self.entries[3].get()))
+       cg=constants.ACSR(float(self.entries[9].get())\
+                         ,float(self.entries[6].get())\
+                         ,float(self.entries[8].get()))
+
        if self.groundconductors_no.get()==1 and ground_wires == True :
            if self.line_type.get()=="Single line configuration":
-               self.lineobj = lineparams.Single_circuit_1g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
-                                                  ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
-                                                  ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
-                                                  ,a4=(float(self.entries[82].get()),float(self.entries[83].get()))\
-                                                  ,Np=float(self.entries[5].get())\
-                                                  ,Ng=float(self.entries[10].get())\
-                                                  ,Rbp=float(self.entries[2].get())\
-                                                  ,Rbg=float(self.entries[7].get()),conductor_p=cp,conductor_g=cg)
+               self.lineobj = lineparams.Single_circuit_1g(\
+                                a1  = (float(self.entries[22].get()),\
+                                        float(self.entries[23].get()))\
+                               ,a2  = (float(self.entries[32].get()),\
+                                        float(self.entries[33].get()))\
+                               ,a3  = (float(self.entries[42].get()),\
+                                        float(self.entries[43].get()))\
+                               ,a4  = (float(self.entries[82].get()),\
+                                      float(self.entries[83].get()))\
+                               ,Np  = float(self.entries[5].get())\
+                               ,Ng  = float(self.entries[10].get())\
+                               ,Rbp = float(self.entries[2].get())\
+                               ,Rbg = float(self.entries[7].get())\
+                               ,conductor_p=cp,conductor_g=cg)
            else:
-               self.lineobj = lineparams.Double_circuit_1g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
-                                                 ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
-                                                 ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
-                                                 ,a4=(float(self.entries[52].get()),float(self.entries[53].get()))\
-                                                 ,a5=(float(self.entries[62].get()),float(self.entries[63].get()))\
-                                                 ,a6=(float(self.entries[72].get()),float(self.entries[73].get()))\
-                                                 ,a7=(float(self.entries[82].get()),float(self.entries[83].get()))\
-                                                 ,Np=float(self.entries[5].get())\
-                                                 ,Ng=float(self.entries[10].get())\
-                                                 ,Rbp=float(self.entries[2].get())\
-                                                 ,Rbg=float(self.entries[7].get()),conductor_p=cp,conductor_g=cg)
+               self.lineobj = lineparams.Double_circuit_1g(            \
+                                a1  = (float(self.entries[22].get())   \
+                                       ,float(self.entries[23].get())) \
+                               ,a2  = (float(self.entries[32].get())   \
+                                      ,float(self.entries[33].get()))  \
+                               ,a3  = (float(self.entries[42].get())   \
+                                       ,float(self.entries[43].get())) \
+                               ,a4  = (float(self.entries[52].get())   \
+                                       ,float(self.entries[53].get())) \
+                               ,a5  = (float(self.entries[62].get())   \
+                                       ,float(self.entries[63].get())) \
+                               ,a6  = (float(self.entries[72].get())   \
+                                       ,float(self.entries[73].get())) \
+                               ,a7  = (float(self.entries[82].get())   \
+                                       ,float(self.entries[83].get())) \
+                               ,Np  = float(self.entries[5].get())     \
+                               ,Ng  = float(self.entries[10].get())    \
+                               ,Rbp = float(self.entries[2].get())     \
+                               ,Rbg = float(self.entries[7].get())     \
+                                      ,conductor_p=cp,conductor_g=cg)
 
        elif self.groundconductors_no.get()==2 and ground_wires == True :
            if self.line_type.get()=="Single line configuration":
-               self.lineobj = lineparams.Single_circuit_2g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
-                                                  ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
-                                                  ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
-                                                  ,a4=(float(self.entries[82].get()),float(self.entries[83].get()))\
-                                                  ,a5=(float(self.entries[92].get()),float(self.entries[93].get()))\
-                                                  ,Np=float(self.entries[5].get())\
-                                                  ,Ng=float(self.entries[10].get())\
-                                                  ,Rbp=float(self.entries[2].get())\
-                                                  ,Rbg=float(self.entries[7].get()),conductor_p=cp,conductor_g=cg)
+               self.lineobj = lineparams.Single_circuit_2g(
+                                a1  = (float(self.entries[22].get())\
+                                       ,float(self.entries[23].get()))\
+                               ,a2  = (float(self.entries[32].get())\
+                                       ,float(self.entries[33].get()))\
+                               ,a3  = (float(self.entries[42].get())\
+                                       ,float(self.entries[43].get()))\
+                               ,a4  = (float(self.entries[82].get())\
+                                       ,float(self.entries[83].get()))\
+                               ,a5  = (float(self.entries[92].get())\
+                                       ,float(self.entries[93].get()))\
+                               ,Np  = float(self.entries[5].get())\
+                               ,Ng  = float(self.entries[10].get())\
+                               ,Rbp = float(self.entries[2].get())\
+                               ,Rbg = float(self.entries[7].get())\
+                                      ,conductor_p=cp,conductor_g=cg)
            else:
-               self.lineobj = lineparams.Double_circuit_2g(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
-                                                 ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
-                                                 ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
-                                                 ,a4=(float(self.entries[52].get()),float(self.entries[53].get()))\
-                                                 ,a5=(float(self.entries[62].get()),float(self.entries[63].get()))\
-                                                 ,a6=(float(self.entries[72].get()),float(self.entries[73].get()))\
-                                                 ,a7=(float(self.entries[82].get()),float(self.entries[83].get()))\
-                                                 ,a8=(float(self.entries[92].get()),float(self.entries[93].get()))\
-                                                 ,Np=float(self.entries[5].get())\
-                                                 ,Ng=float(self.entries[10].get())\
-                                                 ,Rbp=float(self.entries[2].get())\
-                                                 ,Rbg=float(self.entries[7].get()),conductor_p=cp,conductor_g=cg)
+               self.lineobj = \
+            lineparams.Double_circuit_2g(\
+              a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+             ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
+             ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
+             ,a4=(float(self.entries[52].get()),float(self.entries[53].get()))\
+             ,a5=(float(self.entries[62].get()),float(self.entries[63].get()))\
+             ,a6=(float(self.entries[72].get()),float(self.entries[73].get()))\
+             ,a7=(float(self.entries[82].get()),float(self.entries[83].get()))\
+             ,a8=(float(self.entries[92].get()),float(self.entries[93].get()))\
+             ,Np=float(self.entries[5].get())\
+             ,Ng=float(self.entries[10].get())\
+             ,Rbp=float(self.entries[2].get())\
+             ,Rbg=float(self.entries[7].get()),conductor_p=cp,conductor_g=cg)
        else:
            if self.line_type.get()=="Single line configuration":
-               self.lineobj = lineparams.Single_circuit(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
-                                              ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
-                                              ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
-                                              ,Np=float(self.entries[5].get())\
-                                              ,Rbp=float(self.entries[2].get()),conductor_p=cp)
+               self.lineobj = \
+             lineparams.Single_circuit(\
+              a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+             ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
+             ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
+             ,Np=float(self.entries[5].get())\
+             ,Rbp=float(self.entries[2].get()),conductor_p=cp)
            else:
-               self.lineobj = lineparams.Double_circuit(a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
-                                              ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
-                                              ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
-                                              ,a4=(float(self.entries[52].get()),float(self.entries[53].get()))\
-                                              ,a5=(float(self.entries[62].get()),float(self.entries[63].get()))\
-                                              ,a6=(float(self.entries[72].get()),float(self.entries[73].get()))\
-                                              ,Np=float(self.entries[5].get())\
-                                              ,Rbp=float(self.entries[2].get()),conductor_p=cp)
+               self.lineobj = \
+             lineparams.Double_circuit(\
+             a1=(float(self.entries[22].get()),float(self.entries[23].get()))\
+            ,a2=(float(self.entries[32].get()),float(self.entries[33].get()))\
+            ,a3=(float(self.entries[42].get()),float(self.entries[43].get()))\
+            ,a4=(float(self.entries[52].get()),float(self.entries[53].get()))\
+            ,a5=(float(self.entries[62].get()),float(self.entries[63].get()))\
+            ,a6=(float(self.entries[72].get()),float(self.entries[73].get()))\
+            ,Np=float(self.entries[5].get())\
+            ,Rbp=float(self.entries[2].get()),conductor_p=cp)
           
    def display(self):
        self.compute_lineobj(True)    
