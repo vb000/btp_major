@@ -139,7 +139,7 @@ class lineparams_gui():
        line_types = ["Single line configuration","Double line configuration"]
        
        for option in line_types:
-           button = Radiobutton(self.lineselection_frame, text=str(option),font=12,value=option, 
+           button = Radiobutton(self.lineselection_frame, text=str(option),font=10,value=option, 
                command=self.refresh_entries, variable=self.line_type).pack(side=LEFT,padx=5,pady=3)
        self.coordinate_frame=Frame(self.linegeometry_frame)
        self.coordinate_frame.pack(side=TOP,expand=YES,fill=BOTH,padx=5,pady=5,ipadx=5,ipady=5)
@@ -152,7 +152,7 @@ class lineparams_gui():
        self.y_frame.pack(side=LEFT,expand=NO,fill=Y)
 
        Label(self.lineselection_frame, text="Number of ground conductors:",\
-             font=("Times",14,"bold"),padx=10,pady=0, justify=LEFT).pack(side=LEFT, anchor=W)
+             font=("Times",12,"bold"),padx=10,pady=0, justify=LEFT).pack(side=LEFT, anchor=W)
        self.groundconductors_no=IntVar()
        self.groundconductors_no.set(2)
        for option in (0,1,2):
@@ -235,14 +235,14 @@ class lineparams_gui():
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[2]=Entry(self.entry_frame,width=12,justify=CENTER)
        self.entries[2].pack(side=TOP,anchor=W)
-       self.entries[2].insert(0,float(.288))
+       self.entries[2].insert(0,float(.2288))
 
 
        Label(self.label_frame, text="Effective Radius(in M):",\
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[3]=Entry(self.entry_frame,width=12,justify=CENTER)
        self.entries[3].pack(side=TOP,anchor=W)
-       self.entries[3].insert(0,float(0.01272))
+       self.entries[3].insert(0,float(0.0159))
 
        Label(self.label_frame, text="DC Resistance of the conductor(in M):",\
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
@@ -266,7 +266,7 @@ class lineparams_gui():
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[25]=Entry(self.entry_frame,width=12,justify=CENTER)
        self.entries[25].pack(side=TOP,anchor=W)
-       self.entries[25].insert(0,float(0.00444))
+       self.entries[25].insert(0,float(0.0411))
        
        Label(self.label_frame, text="Resistivity of each strand(in Ohm-M):",
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)

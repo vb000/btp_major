@@ -101,7 +101,7 @@ class performanceparams_gui(lineparams_gui):
         es.reverse()
 
         plt.figure(1)
-        plt.plot(distance, es, label="Vlotage Profile")
+        plt.plot(distance, es, label="Voltage Profile")
         plt.title('Voltage');
         plt.xlabel('Distance from sending end (km)');
         plt.legend(loc='best')
