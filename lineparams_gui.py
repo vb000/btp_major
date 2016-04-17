@@ -266,7 +266,7 @@ class lineparams_gui():
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
        self.entries[25]=Entry(self.entry_frame,width=12,justify=CENTER)
        self.entries[25].pack(side=TOP,anchor=W)
-       self.entries[25].insert(0,float(0.0411))
+       self.entries[25].insert(0,float(0.007745))
        
        Label(self.label_frame, text="Resistivity of each strand(in Ohm-M):",
             font=("Times",11,"bold"),padx=0,pady=0, justify=LEFT).pack(side=TOP, anchor=W)
